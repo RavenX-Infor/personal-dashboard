@@ -1,4 +1,4 @@
-import os
+from utils.console import effacer_ecran
 
 from features.tasks.manager import (
     voir_tasks,
@@ -8,17 +8,12 @@ from features.tasks.manager import (
 )
 
 
-def effacer_ecran():
-    """Efface la console selon le système d'exploitation."""
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-
 def menu_task():
     actions = {
-        "1": (voir_tasks, "--- Menu voir ---"),
-        "2": (ajouter_task, "--- Menu add ---"),
-        "3": (terminer_task, "--- Menu terminer ---"),
-        "4": (supprimer_task, "--- Menu delete ---")
+        "1": (voir_tasks),
+        "2": (ajouter_task,),
+        "3": (terminer_task),
+        "4": (supprimer_task)
     }
 
     while True:
@@ -38,17 +33,12 @@ def menu_task():
 
         if choix == "0":
             return
-        elif choix in actions:
+        if choix in actions:
             effacer_ecran()
-            fonction, en_tete = actions[choix]
-            if en_tete:
-                print(f"{en_tete}\n")
-            fonction()
+            actions[choix]()
         else: 
             input("\nChoix Invalide. Appuyez sur Entrée pour réesayer...")
             continue
 
         input("\nPresser Entrée pour revenir au menu Task Gestionnaire...")
 
-if __name__ == "__main__":
-    menu_task()
