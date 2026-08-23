@@ -1,56 +1,85 @@
 from features.automation.utils import demander_dossier
 
+from utils.ui import (
+    titre,
+    succes,
+    erreur,
+    avertissement,
+    info
+)
+
+
 def renommer_fichiers():
+    titre("RENOMMER DES FICHIERS")
+
     path = demander_dossier()
-    
+
     if path is None:
         return
-    
 
-    
-    fichiers = [f for f in path.iterdir() if f.is_file()]
+    fichiers = [
+        fichier
+        for fichier in path.iterdir()
+        if fichier.is_file()
+    ]
+
     total = len(fichiers)
-    
+
     if total == 0:
-        print("Le dossier ne contient aucun fichier.")
+        info("Le dossier ne contient aucun fichier.")
         return
-    
-    s = "s" if total > 1 else ""
 
+    info(
+        f"{total} fichier"
+        f"{'s' if total > 1 else ''} trouvé"
+        f"{'s' if total > 1 else ''}."
+    )
 
-    print(f"\n {total} fichier{s} trouvé{s} dans le dossier : \n")
-
-    new_name = input("Nouveau nom : ").strip()
+    new_name = input(
+        "\n› Nouveau nom : "
+    ).strip()
 
     if not new_name:
-        print("Le nouveau nom ne peut pas être vide")
+        erreur("Le nouveau nom ne peut pas être vide.")
         return
 
     renommes = 0
     ignores = 0
-    
 
-    for index, fichier in enumerate(fichiers, start=1):
+    print()
 
-        nouveau_name = f"{new_name}_{index:03d}{fichier.suffix}"
+    for index, fichier in enumerate(
+        fichiers,
+        start=1
+    ):
+        nouveau_nom = (
+            f"{new_name}_{index:03d}"
+            f"{fichier.suffix}"
+        )
 
-        destination = path / nouveau_name
+        destination = path / nouveau_nom
 
         if destination.exists():
             ignores += 1
-            print(f"⚠️ {nouveau_name} existe déjà, fichier ignoré.")
+
+            avertissement(
+                f"{nouveau_nom} existe déjà."
+            )
+
             continue
-        
-        
+
         ancien_nom = fichier.name
+
         fichier.rename(destination)
+
         renommes += 1
-        
-        print(f"✅ {ancien_nom} -> {nouveau_name}")
 
-    s_renommes = "s" if renommes > 1 else ""
-    s_ignores = "s" if ignores > 1 else ""  
+        succes(
+            f"{ancien_nom} → {nouveau_nom}"
+        )
 
-    print("\nRenommage terminé.")
-    print(f"{renommes} fichier{s_renommes} renommé{s_renommes}.")
-    print(f"{ignores} fichier{s_ignores} ignoré{s_ignores}.")
+    print()
+    titre("RÉSUMÉ")
+
+    info(f"Fichiers renommés : {renommes}")
+    info(f"Fichiers ignorés  : {ignores}")

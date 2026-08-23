@@ -1,37 +1,55 @@
 from utils.console import effacer_ecran
 
-from features.system.monitor import vue_generale, memoire, processeur, stockage
+from features.system.monitor import (
+    vue_generale,
+    memoire,
+    processeur,
+    stockage
+)
+
+from utils.ui import (
+    titre,
+    menu_options,
+    erreur,
+    pause
+)
+
 
 def menu_system():
     actions = {
-      "1": vue_generale,
-      "2": processeur,
-      "3": memoire,
-      "4": stockage
+        "1": vue_generale,
+        "2": processeur,
+        "3": memoire,
+        "4": stockage
+    }
+
+    options = {
+        "1": "Vue générale",
+        "2": "Processeur",
+        "3": "Mémoire RAM",
+        "4": "Stockage"
     }
 
     while True:
-          effacer_ecran()
-            
-          print("=" * 35)
-          print("        SYSTEM MONITOR          ")
-          print("=" * 35)
-          print(" [1] Vue général")
-          print(" [2] Voir CPU")
-          print(" [3] Voir mémoire")
-          print(" [4] Voir stockage")
-          print(" [0] Retour")
-          print("-" * 35)
-    
-          choix = input("Votre choix : ").strip()
-    
-          if choix == "0":
-              return
-          if choix in actions:
-              effacer_ecran()
-              actions[choix]()
-          else: 
-              input("\nChoix Invalide. Appuyez sur Entrée pour réesayer...")
-              continue
-    
-          input("\nAppuyez sur Entrée pour revenir au System Monitor...")
+        effacer_ecran()
+
+        titre("SYSTEM MONITOR")
+        menu_options(options)
+
+        choix = input("\n› Votre choix : ").strip()
+
+        if choix == "0":
+            return
+
+        if choix in actions:
+            effacer_ecran()
+            actions[choix]()
+
+            pause(
+                "Appuyez sur Entrée pour revenir "
+                "au System Monitor..."
+            )
+
+        else:
+            erreur("Choix invalide.")
+            pause()

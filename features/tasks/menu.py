@@ -4,112 +4,301 @@ from features.tasks.manager import (
     voir_tasks,
     ajouter_task,
     terminer_task,
-    supprimer_task
+    supprimer_task,
+    modif_tasks
 )
+
+from utils.ui import (
+    titre,
+    menu_options,
+    succes,
+    erreur,
+    avertissement,
+    info,
+    pause
+)
+
+
 def int_voir_task():
     tasks = voir_tasks()
 
-    print("MES TACHES")
+    titre("MES TÂCHES")
 
     if not tasks:
-        print("Aucune tâche.")
+        info("Aucune tâche.")
         return
 
     for task in tasks:
-        statut = "[X]" if task["terminee"] else "[ ]"
-        print(f'{statut} {task["id"]} - {task["titre"]}')
+        prio = task.get("priorite", "moyenne")
+        date = task.get("date_creation", "non renseignée")
+        deadline = task.get("deadline", "non renseignée")
+        statut = "✓" if task["terminee"] else "○"
+
+        print()
+        print(f' {statut} #{task["id"]}  {task["titre"]}')
+        print(f'    Priorité : {prio.upper()}')
+        print(f'    Créée    : {date}')
+        print(f'    Deadline : {deadline}')
 
 
 def int_ajouter_task():
-    titre = input("Nouvelle tâche : ").strip()
+    titre_task = input("Nouvelle tâche : ").strip()
 
-    task = ajouter_task(titre)
+    prio = input(
+        "Ajouter une priorité (faible, moyenne ou haute) : "
+    ).strip().lower()
 
-    if task is None:
-        print("Veuillez mettre un titre à votre tâche.")
+    deadline = input(
+        "Ajouter une deadline (JJ/MM/AAAA) : "
+    ).strip()
+
+    task, code_erreur = ajouter_task(
+        titre_task,
+        prio,
+        deadline
+    )
+
+    if code_erreur == "titre_vide":
+        erreur("Le titre ne peut pas être vide.")
         return
 
-    print(f'Tâche "{task["titre"]}" ajoutée avec l\'ID {task["id"]}.')
+    if code_erreur == "priorite_invalide":
+        erreur("La priorité est invalide.")
+        return
+
+    if code_erreur == "deadline_invalide":
+        erreur("La deadline doit être au format JJ/MM/AAAA.")
+        return
+
+    if code_erreur == "deadline_passe":
+        avertissement("La deadline est déjà passée.")
+        return
+
+    if code_erreur == "deadline_trop_loin":
+        avertissement("La deadline est trop éloignée.")
+        return
+
+    succes(
+        f'Tâche "{task["titre"]}" ajoutée '
+        f'avec l\'ID {task["id"]} '
+        f'et la priorité {task["priorite"].upper()}.'
+    )
+
 
 def int_terminer_task():
     tasks = voir_tasks()
 
     if not tasks:
-        print("Aucune tâche.")
+        info("Aucune tâche.")
         return
 
     int_voir_task()
 
     try:
-        id_task = int(input("\nID de la tâche à terminer : "))
+        id_task = int(
+            input("\nID de la tâche à terminer : ")
+        )
     except ValueError:
-        print("Erreur : l'ID doit être un nombre.")
+        erreur("L'ID doit être un nombre.")
         return
 
     resultat = terminer_task(id_task)
 
     if resultat is None:
-        print(f"Aucune tâche avec l'ID {id_task}.")
-    elif resultat is False:
-        print("Cette tâche est déjà terminée.")
-    else:
-        print(f'La tâche "{resultat["titre"]}" est terminée.')
+        erreur(f"Aucune tâche avec l'ID {id_task}.")
+        return
+
+    if resultat is False:
+        avertissement("Cette tâche est déjà terminée.")
+        return
+
+    succes(
+        f'La tâche "{resultat["titre"]}" est terminée.'
+    )
+
 
 def int_supprimer_task():
     tasks = voir_tasks()
 
     if not tasks:
-        print("Aucune tâche.")
+        info("Aucune tâche.")
         return
 
     int_voir_task()
 
     try:
-        id_task = int(input("\nID de la tâche à supprimer : "))
+        id_task = int(
+            input("\nID de la tâche à supprimer : ")
+        )
     except ValueError:
-        print("Erreur : l'ID doit être un nombre.")
+        erreur("L'ID doit être un nombre.")
         return
 
     resultat = supprimer_task(id_task)
 
     if resultat is None:
-        print(f"Aucune tâche avec l'ID {id_task}.")
+        erreur(f"Aucune tâche avec l'ID {id_task}.")
+        return
+
+    succes(
+        f'La tâche "{resultat["titre"]}" a été supprimée.'
+    )
+
+
+def int_modif_task():
+    tasks = voir_tasks()
+
+    if not tasks:
+        info("Aucune tâche.")
+        return
+
+    int_voir_task()
+
+    try:
+        id_task = int(
+            input("\nID de la tâche à modifier : ")
+        )
+    except ValueError:
+        erreur("L'ID doit être un nombre.")
+        return
+
+    options_modif = {
+        "1": "Modifier le titre",
+        "2": "Modifier la priorité",
+        "3": "Modifier la deadline"
+    }
+
+    print()
+    titre("MODIFIER UNE TÂCHE")
+    menu_options(options_modif)
+
+    choix = input("\n› Votre choix : ").strip()
+
+    if choix == "0":
+        info("Modification annulée.")
+        return
+
+    if choix == "1":
+        nouveau_titre = input(
+            "Nouveau titre : "
+        ).strip()
+
+        resultat, code_erreur = modif_tasks(
+            id_task,
+            new_titre=nouveau_titre
+        )
+
+        if code_erreur == "task_introuvable":
+            erreur(f"Aucune tâche avec l'ID {id_task}.")
+            return
+
+        if code_erreur == "titre_vide":
+            erreur("Le titre ne peut pas être vide.")
+            return
+
+        succes(
+            f'Titre modifié : "{resultat["titre"]}"'
+        )
+
+    elif choix == "2":
+        prio = input(
+            "Nouvelle priorité "
+            "(faible, moyenne ou haute) : "
+        ).strip().lower()
+
+        resultat, code_erreur = modif_tasks(
+            id_task,
+            new_prio=prio
+        )
+
+        if code_erreur == "task_introuvable":
+            erreur(f"Aucune tâche avec l'ID {id_task}.")
+            return
+
+        if code_erreur == "priorite_invalide":
+            erreur("Priorité invalide.")
+            return
+
+        succes(
+            f'Priorité modifiée : '
+            f'{resultat["priorite"].upper()}'
+        )
+
+    elif choix == "3":
+        deadline = input(
+            "Nouvelle deadline (JJ/MM/AAAA) : "
+        ).strip()
+
+        resultat, code_erreur = modif_tasks(
+            id_task,
+            new_deadline=deadline
+        )
+
+        if code_erreur == "task_introuvable":
+            erreur(f"Aucune tâche avec l'ID {id_task}.")
+            return
+
+        if code_erreur == "deadline_invalide":
+            erreur(
+                "La deadline doit être au format JJ/MM/AAAA."
+            )
+            return
+
+        if code_erreur == "deadline_passe":
+            avertissement(
+                "La deadline est déjà passée."
+            )
+            return
+
+        if code_erreur == "deadline_trop_loin":
+            avertissement(
+                "La deadline est trop éloignée."
+            )
+            return
+
+        succes(
+            f'Deadline modifiée : '
+            f'{resultat["deadline"]}'
+        )
+
     else:
-        print(f'La tâche "{resultat["titre"]}" a été supprimée.')
+        erreur("Choix invalide.")
+
 
 def menu_task():
     actions = {
         "1": int_voir_task,
         "2": int_ajouter_task,
         "3": int_terminer_task,
-        "4": int_supprimer_task
+        "4": int_supprimer_task,
+        "5": int_modif_task
+    }
+
+    options = {
+        "1": "Voir les tâches",
+        "2": "Ajouter une tâche",
+        "3": "Terminer une tâche",
+        "4": "Supprimer une tâche",
+        "5": "Modifier une tâche"
     }
 
     while True:
         effacer_ecran()
-        
-        print("=" * 35)
-        print("        Task Gestionnaire       ")
-        print("=" * 35)
-        print(" [1] Voir les tâches")
-        print(" [2] Ajouter une tâche")
-        print(" [3] Terminer une tâche")
-        print(" [4] Supprimer une tâche")
-        print(" [0] Retour")
-        print("-" * 35)
 
-        choix = input("Votre choix : ").strip()
+        titre("GESTIONNAIRE DE TÂCHES")
+        menu_options(options)
+
+        choix = input("\n› Votre choix : ").strip()
 
         if choix == "0":
             return
+
         if choix in actions:
             effacer_ecran()
             actions[choix]()
-
-            
-        else: 
-            input("\nChoix Invalide. Appuyez sur Entrée pour réesayer...")
-            continue
-
-        input("\nPresser Entrée pour revenir au menu Task Gestionnaire...")
-
+            pause(
+                "Appuyez sur Entrée pour revenir aux tâches..."
+            )
+        else:
+            erreur("Choix invalide.")
+            pause()
