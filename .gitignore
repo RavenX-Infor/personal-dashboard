@@ -1,6 +1,14 @@
 .venv/
+venv/
+
 __pycache__/
-*.pyc
+*.pyc[cod]
+
+.env
+.env.*
+
 .vscode/
+
+
 .DS_Store
 Thumbs.db
