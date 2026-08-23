@@ -3,7 +3,16 @@ from features.tasks.menu import menu_task
 from features.system.menu import menu_system
 
 from utils.console import effacer_ecran
-from utils.ui import titre, menu_options, erreur, succes, pause
+from utils.ui import (
+    console,
+    titre,
+    menu_options,
+    erreur,
+    succes,
+    pause
+)
+
+from config import APP_NAME, VERSION
 
 
 def main_menu():
@@ -22,7 +31,13 @@ def main_menu():
     while True:
         effacer_ecran()
 
-        titre("PERSONAL DASHBOARD")
+        titre(APP_NAME.upper())
+
+        console.print(
+            f"[dim]v{VERSION}[/dim]",
+            justify="center"
+        )
+
         menu_options(options, retour="Quitter")
 
         choix = input("\n› Votre choix : ").strip()
