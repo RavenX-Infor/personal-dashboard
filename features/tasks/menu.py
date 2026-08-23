@@ -19,6 +19,11 @@ from utils.ui import (
 )
 
 
+from rich.table import Table
+from rich import box
+
+from utils.ui import console
+
 def int_voir_task():
     tasks = voir_tasks()
 
@@ -28,19 +33,49 @@ def int_voir_task():
         info("Aucune tâche.")
         return
 
+    table = Table(
+        box=box.ROUNDED,
+        show_header=True,
+        header_style="bold cyan",
+        expand=True
+    )
+
+    table.add_column("Statut", justify="center", width=8)
+    table.add_column("ID", justify="center", width=5)
+    table.add_column("Tâche")
+    table.add_column("Priorité", justify="center")
+    table.add_column("Créée le")
+    table.add_column("Deadline")
+
     for task in tasks:
-        prio = task.get("priorite", "moyenne")
-        date = task.get("date_creation", "non renseignée")
-        deadline = task.get("deadline", "non renseignée")
-        statut = "✓" if task["terminee"] else "○"
+        priorite = task.get("priorite", "moyenne")
+        date = task.get("date_creation", "Non renseignée")
+        deadline = task.get("deadline", "Non renseignée")
 
-        print()
-        print(f' {statut} #{task["id"]}  {task["titre"]}')
-        print(f'    Priorité : {prio.upper()}')
-        print(f'    Créée    : {date}')
-        print(f'    Deadline : {deadline}')
+        if task["terminee"]:
+            statut = "[green]✓ Terminée[/green]"
+        else:
+            statut = "[yellow]○ En cours[/yellow]"
 
+        if priorite == "haute":
+            priorite_affichage = "[bold red]HAUTE[/bold red]"
 
+        elif priorite == "moyenne":
+            priorite_affichage = "[bold yellow]MOYENNE[/bold yellow]"
+
+        else:
+            priorite_affichage = "[bold green]FAIBLE[/bold green]"
+
+        table.add_row(
+            statut,
+            str(task["id"]),
+            task["titre"],
+            priorite_affichage,
+            date,
+            deadline
+        )
+
+    console.print(table)
 def int_ajouter_task():
     titre_task = input("Nouvelle tâche : ").strip()
 
