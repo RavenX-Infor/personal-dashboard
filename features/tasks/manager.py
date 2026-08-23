@@ -4,6 +4,7 @@ from features.tasks.storage import save_task, charger_tasks
 
 
 def trouver_task(tasks, id_task):
+    """Retourne une tâche à partir de son ID, ou None si elle n'existe pas."""
     for task in tasks:
         if task["id"] == id_task:
             return task
@@ -12,6 +13,7 @@ def trouver_task(tasks, id_task):
 
 
 def valider_deadline(deadline):
+    """Valide une deadline au format JJ/MM/AAAA et retourne une erreur éventuelle."""
     if not deadline:
         return None, "deadline_invalide"
 
@@ -33,6 +35,7 @@ def valider_deadline(deadline):
 
 
 def ajouter_task(titre, priorite, deadline):
+    """Crée et sauvegarde une nouvelle tâche."""
     priorites_valides = ["faible", "moyenne", "haute"]
 
     if not titre:
@@ -41,7 +44,7 @@ def ajouter_task(titre, priorite, deadline):
     if priorite not in priorites_valides:
         return None, "priorite_invalide"
 
-    deadline_date, erreur = valider_deadline(deadline)
+    _, erreur = valider_deadline(deadline)
 
     if erreur:
         return None, erreur
@@ -75,6 +78,7 @@ def voir_tasks():
 
 
 def modif_tasks(id_task, new_titre=None, new_prio=None, new_deadline=None):
+    """Modifie les informations d'une tâche existante."""
     tasks = charger_tasks()
     priorites_valides = ["faible", "moyenne", "haute"]
 
@@ -100,7 +104,7 @@ def modif_tasks(id_task, new_titre=None, new_prio=None, new_deadline=None):
         task["priorite"] = new_prio
 
     if new_deadline is not None:
-        deadline_date, erreur = valider_deadline(new_deadline)
+        _, erreur = valider_deadline(new_deadline)
 
         if erreur:
             return None, erreur

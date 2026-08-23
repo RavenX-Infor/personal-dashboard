@@ -1,14 +1,9 @@
+from rich import box
+from rich.table import Table
+
 from utils.console import effacer_ecran
-
-from features.tasks.manager import (
-    voir_tasks,
-    ajouter_task,
-    terminer_task,
-    supprimer_task,
-    modif_tasks
-)
-
 from utils.ui import (
+    console,
     titre,
     menu_options,
     succes,
@@ -18,11 +13,13 @@ from utils.ui import (
     pause
 )
 
-
-from rich.table import Table
-from rich import box
-
-from utils.ui import console
+from features.tasks.manager import (
+    voir_tasks,
+    ajouter_task,
+    terminer_task,
+    supprimer_task,
+    modif_tasks
+)
 
 def int_voir_task():
     tasks = voir_tasks()

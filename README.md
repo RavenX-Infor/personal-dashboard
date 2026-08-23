@@ -1,149 +1,101 @@
 # Personal Dashboard
 
-Personal Dashboard est une application en ligne de commande développée en **Python** permettant de regrouper plusieurs outils utiles au quotidien depuis une seule interface.
+Personal Dashboard est une application terminal développée en Python regroupant plusieurs outils personnels dans une seule interface.
 
-Le projet est organisé en différentes fonctionnalités indépendantes afin de pouvoir facilement ajouter de nouveaux outils au fil du développement.
+Le projet est actuellement en développement.
 
-## ✨ Fonctionnalités
+## Fonctionnalités
 
-### 📁 Automatisation
+### Automation Center
 
-Outils permettant d'effectuer différentes opérations sur les fichiers et dossiers :
+Outils permettant d'automatiser certaines tâches liées aux fichiers.
 
-* Organisation automatique de fichiers
-* Renommage de fichiers
-* Analyse de dossiers
+- Organisation automatique d'un dossier par type de fichier
+- Renommage automatique de plusieurs fichiers
+- Analyse d'un dossier
+- Analyse des extensions et de l'espace utilisé
 
-### 💻 Système
+### Gestionnaire de tâches
 
-Outils permettant de consulter différentes informations concernant l'ordinateur :
+Gestion de tâches persistantes enregistrées localement.
 
-* Informations système
-* Utilisation du processeur
-* Utilisation de la mémoire RAM
-* Informations sur les disques et le stockage
+- Ajouter une tâche
+- Modifier une tâche
+- Supprimer une tâche
+- Terminer une tâche
+- Priorités : faible, moyenne et haute
+- Date de création
+- Deadline
+- Affichage sous forme de tableau
 
-### ✅ Gestionnaire de tâches
+### System Monitor
 
-Gestion simple de tâches depuis le terminal :
+Informations et statistiques sur le système.
 
-* Afficher les tâches
-* Ajouter une tâche
-* Terminer une tâche
-* Supprimer une tâche
+- Vue générale
+- Utilisation CPU
+- Informations processeur
+- Utilisation RAM
+- Stockage et espace disponible
+- Uptime du système
 
-Les tâches sont sauvegardées localement dans un fichier JSON.
+## Technologies
 
----
+- Python
+- Rich
+- psutil
+- JSON
 
-## 🚀 Installation
+## Installation
 
-### 1. Cloner le projet
+Cloner le projet :
 
 ```bash
-git clone URL_DU_REPOSITORY
+git clone <URL_DU_REPO>
 cd personal-dashboard
 ```
 
-### 2. Créer un environnement virtuel
+Créer un environnement virtuel :
 
 ```bash
 python -m venv .venv
 ```
 
-### 3. Activer l'environnement virtuel
-
-#### Windows PowerShell
+Activer l'environnement sous Windows :
 
 ```powershell
-.\.venv\Scripts\Activate.ps1
+.venv\Scripts\Activate.ps1
 ```
 
-### 4. Installer les dépendances
+Installer les dépendances :
 
 ```bash
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
----
-
-## ▶️ Utilisation
-
-Une fois l'environnement virtuel activé, lancer l'application avec :
+## Lancement
 
 ```bash
 python main.py
 ```
 
-Le menu principal permet ensuite d'accéder aux différentes fonctionnalités du dashboard.
-
----
-
-## 📂 Structure du projet
+## Structure
 
 ```text
 personal-dashboard/
-│
-├── main.py
-├── README.md
-├── requirements.txt
-├── .gitignore
-│
 ├── data/
-│   └── task.json
-│
 ├── features/
-│   │
 │   ├── automation/
-│   │   ├── analyzer.py
-│   │   ├── menu.py
-│   │   ├── organizer.py
-│   │   ├── renamer.py
-│   │   └── utils.py
-│   │
 │   ├── system/
-│   │   ├── menu.py
-│   │   └── monitor.py
-│   │
 │   └── tasks/
-│       ├── manager.py
-│       └── menu.py
-│
-└── utils/
-    └── console.py
+├── utils/
+│   ├── console.py
+│   └── ui.py
+├── main.py
+├── requirements.txt
+└── README.md
 ```
 
----
+## Statut
 
-## 🛠️ Technologies
-
-* **Python 3**
-* **psutil** — récupération des informations système
-* **JSON** — stockage des tâches
-* **Git** — gestion des versions
-* **GitHub** — hébergement du repository
-
----
-
-## 🗺️ Roadmap
-
-Personal Dashboard est encore en développement.
-
-### Améliorations prévues
-
-* [ ] Améliorer la gestion des erreurs
-* [ ] Ajouter un système de logs
-* [ ] Améliorer l'interface du terminal
-* [ ] Ajouter de nouvelles informations système
-* [ ] Améliorer le gestionnaire de tâches
-* [ ] Ajouter de nouveaux outils d'automatisation
-* [ ] Ajouter de nouvelles fonctionnalités au dashboard
-* [ ] Ajouter des tests automatisés
-
----
-
-## 🎯 Objectif du projet
-
-L'objectif de Personal Dashboard est de construire progressivement une boîte à outils personnelle utilisable directement depuis le terminal.
-
-Le projet sert également à expérimenter différentes fonctionnalités de Python, améliorer l'organisation du code et apprendre à développer une application de plus en plus complète et maintenable.
+🚧 Projet en cours de développement.
