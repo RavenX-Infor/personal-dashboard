@@ -1,8 +1,17 @@
+import argparse
+
+from config import (
+    APP_NAME,
+    VERSION,
+    DESCRIPTION
+)
+
 from features.automation.menu import menu_automation
 from features.tasks.menu import menu_task
 from features.system.menu import menu_system
 
 from utils.console import effacer_ecran
+
 from utils.ui import (
     console,
     titre,
@@ -12,7 +21,20 @@ from utils.ui import (
     pause
 )
 
-from config import APP_NAME, VERSION
+
+def creer_parser():
+    parser = argparse.ArgumentParser(
+        prog="personal-dashboard",
+        description=DESCRIPTION
+    )
+
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"{APP_NAME} v{VERSION}"
+    )
+
+    return parser
 
 
 def main_menu():
@@ -38,22 +60,42 @@ def main_menu():
             justify="center"
         )
 
-        menu_options(options, retour="Quitter")
+        menu_options(
+            options,
+            retour="Quitter"
+        )
 
         choix = input("\n› Votre choix : ").strip()
 
         if choix == "0":
             effacer_ecran()
             succes("À bientôt !")
-            break
+            return
 
         if choix in actions:
             effacer_ecran()
             actions[choix]()
+
         else:
             erreur("Choix invalide.")
             pause()
 
 
+def main():
+    parser = creer_parser()
+
+    parser.parse_args()
+
+    try:
+        main_menu()
+
+    except KeyboardInterrupt:
+        effacer_ecran()
+
+        console.print()
+
+        succes("À bientôt !")
+
+
 if __name__ == "__main__":
-    main_menu()
+    main()
