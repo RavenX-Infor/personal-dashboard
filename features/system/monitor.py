@@ -70,7 +70,10 @@ def stockage():
     partitions = psutil.disk_partitions()
 
     for partition in partitions:
-        usage = psutil.disk_usage(partition.mountpoint)
+        try:
+            usage = psutil.disk_usage(partition.mountpoint)
+        except (PermissionError, OSError):
+            continue
 
         total = octets_vers_go(usage.total)
         utilise = octets_vers_go(usage.used)

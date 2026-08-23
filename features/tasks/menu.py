@@ -11,7 +11,7 @@ from features.tasks.manager import (
 def menu_task():
     actions = {
         "1": (voir_tasks),
-        "2": (ajouter_task,),
+        "2": (ajouter_task),
         "3": (terminer_task),
         "4": (supprimer_task)
     }
