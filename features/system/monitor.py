@@ -253,3 +253,15 @@ def stockage():
         return
 
     console.print(table)
+
+
+def obtenir_resume_systeme():
+    cpu_percent = psutil.cpu_percent(interval=1)
+
+    memoire_ram = psutil.virtual_memory()
+    ram_percent = memoire_ram.percent
+
+    return {
+        "cpu": cpu_percent,
+        "ram": ram_percent
+    }

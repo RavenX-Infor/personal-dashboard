@@ -9,7 +9,7 @@ from config import (
 from features.automation.menu import menu_automation
 from features.tasks.menu import menu_task
 from features.system.menu import menu_system
-
+from features.dashboard.home import afficher_dashboard
 from utils.console import effacer_ecran
 
 from utils.ui import (
@@ -59,6 +59,8 @@ def main_menu():
             f"[dim]v{VERSION}[/dim]",
             justify="center"
         )
+
+        afficher_dashboard()
 
         menu_options(
             options,

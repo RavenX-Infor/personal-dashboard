@@ -134,6 +134,8 @@ def terminer_task(id_task):
 
 
 def supprimer_task(id_task):
+
+
     tasks = charger_tasks()
 
     task = trouver_task(tasks, id_task)
@@ -145,3 +147,60 @@ def supprimer_task(id_task):
     save_task(tasks)
 
     return task
+
+def obtenir_resume_task():
+    tasks = voir_tasks()
+
+    total = len(tasks)
+    maintenant = datetime.now()
+
+    en_cours = [
+        tache for tache in tasks
+        if tache.get("terminee") is False
+    ]
+
+    terminer = [
+        tache for tache in tasks
+        if tache.get("terminee") is True
+    ]
+
+    prio_haute = [
+        tache for tache in en_cours
+        if tache.get("priorite") == "haute"
+    ]
+
+    deadline_futures = []
+
+    for tache in en_cours:
+        deadline_str = tache.get("deadline")
+
+        if deadline_str:
+            try:
+                deadline_date = datetime.strptime(deadline_str, "%d/%m/%Y")
+            except ValueError:
+                continue
+            if deadline_date.date() >= maintenant.date():
+                deadline_futures.append((deadline_date, tache))
+
+    if deadline_futures:
+        prochaine_date, prochaine_tache = min(deadline_futures, key=lambda x: x[0])
+
+        jours_restant = (prochaine_date.date() - maintenant.date()).days
+    else:
+        prochaine_tache = None
+        jours_restant = None
+    return {
+        "total": total,
+        "en_cours": len(en_cours),
+        "terminees": len(terminer),
+        "hautes": len(prio_haute),
+        "prochaine": (
+            {
+                "titre": prochaine_tache["titre"],
+                "deadline": prochaine_tache["deadline"],
+                "jours_restant": jours_restant
+            }
+            if prochaine_tache
+            else None
+        )
+    }
