@@ -11,6 +11,7 @@ from features.tasks.menu import menu_task
 from features.system.menu import menu_system
 from features.dashboard.home import afficher_dashboard
 from utils.console import effacer_ecran
+from datetime import datetime
 
 from utils.ui import (
     console,
@@ -57,6 +58,13 @@ def main_menu():
 
         console.print(
             f"[dim]v{VERSION}[/dim]",
+            justify="center"
+        )
+
+        date_heure = datetime.now().strftime("%d/%m/%Y • %H:%M")
+
+        console.print(
+            f"[dim]{date_heure}[/dim]",
             justify="center"
         )
 

@@ -10,14 +10,11 @@ from rich import box
 from utils.ui import (
     console,
     titre,
-    info,
     avertissement
 )
 
-
 def octets_vers_go(octets):
     return octets / (1024 ** 3)
-
 
 def uptime():
     demarrage = datetime.fromtimestamp(
@@ -35,7 +32,6 @@ def uptime():
 
     return jours, heures, minutes
 
-
 def couleur_utilisation(pourcentage):
     if pourcentage >= 85:
         return "red"
@@ -44,7 +40,6 @@ def couleur_utilisation(pourcentage):
         return "yellow"
 
     return "green"
-
 
 def afficher_barre(pourcentage):
     couleur = couleur_utilisation(pourcentage)
@@ -56,7 +51,6 @@ def afficher_barre(pourcentage):
         complete_style=couleur,
         finished_style=couleur
     )
-
 
 def vue_generale():
     titre("VUE GÉNÉRALE")
@@ -110,7 +104,6 @@ def vue_generale():
         f" {ram_percent:.1f}%"
     )
 
-
 def processeur():
     titre("PROCESSEUR")
 
@@ -162,7 +155,6 @@ def processeur():
         f" {pourcent_cpu:.1f}%"
     )
 
-
 def memoire():
     titre("MÉMOIRE RAM")
 
@@ -199,7 +191,6 @@ def memoire():
         afficher_barre(ram.percent),
         f" {ram.percent:.1f}%"
     )
-
 
 def stockage():
     titre("STOCKAGE")
@@ -254,14 +245,24 @@ def stockage():
 
     console.print(table)
 
-
 def obtenir_resume_systeme():
     cpu_percent = psutil.cpu_percent(interval=1)
 
     memoire_ram = psutil.virtual_memory()
     ram_percent = memoire_ram.percent
 
+    utilisation_max = max(cpu_percent, ram_percent)
+
+    if utilisation_max >= 85:
+        etat = "Critique"
+    elif utilisation_max >= 60:
+        etat = "Élevé"
+    else:
+        etat = "Normal"
+
+
     return {
         "cpu": cpu_percent,
-        "ram": ram_percent
+        "ram": ram_percent,
+        "etat": etat
     }

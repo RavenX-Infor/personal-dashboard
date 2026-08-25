@@ -2,9 +2,31 @@
 
 Personal Dashboard est une application terminal développée en Python regroupant plusieurs outils personnels dans une seule interface.
 
-Le projet est actuellement en développement.
+Le projet propose un tableau de bord central permettant de consulter rapidement ses tâches, l'état du système et les informations importantes.
 
 ## Fonctionnalités
+
+### Dashboard
+
+Accueil central affichant un résumé des informations importantes.
+
+- Résumé des tâches
+- Nombre de tâches en cours et terminées
+- Nombre de tâches en retard
+- Nombre de tâches à priorité haute
+- Progression globale des tâches
+- Prochaine deadline
+- Nombre de jours avant la prochaine deadline
+- Résumé de l'utilisation CPU et RAM
+- État global du système
+- Système d'alertes dynamiques
+- Date et heure
+
+Les alertes possèdent plusieurs niveaux :
+
+- 🟢 Succès
+- 🟡 Avertissement
+- 🔴 Danger
 
 ### Automation Center
 
@@ -26,6 +48,9 @@ Gestion de tâches persistantes enregistrées localement.
 - Priorités : faible, moyenne et haute
 - Date de création
 - Deadline
+- Détection des tâches en retard
+- Calcul de la prochaine deadline
+- Progression globale
 - Affichage sous forme de tableau
 
 ### System Monitor
@@ -38,6 +63,7 @@ Informations et statistiques sur le système.
 - Utilisation RAM
 - Stockage et espace disponible
 - Uptime du système
+- État du système : Normal, Élevé ou Critique
 
 ## Technologies
 
@@ -79,6 +105,12 @@ pip install -r requirements.txt
 python main.py
 ```
 
+Afficher la version installée :
+
+```bash
+python main.py --version
+```
+
 ## Structure
 
 ```text
@@ -86,16 +118,25 @@ personal-dashboard/
 ├── data/
 ├── features/
 │   ├── automation/
+│   ├── dashboard/
 │   ├── system/
 │   └── tasks/
 ├── utils/
 │   ├── console.py
 │   └── ui.py
+├── config.py
 ├── main.py
 ├── requirements.txt
+├── CHANGELOG.md
 └── README.md
 ```
 
+## Version
+
+Version actuelle : **v0.2.0**
+
+Consultez [CHANGELOG.md](CHANGELOG.md) pour suivre l'évolution du projet.
+
 ## Statut
 
-🚧 Projet en cours de développement.
+🚧 Personal Dashboard est actuellement en développement.

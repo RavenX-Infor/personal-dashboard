@@ -169,7 +169,13 @@ def obtenir_resume_task():
         if tache.get("priorite") == "haute"
     ]
 
+    if total == 0:
+        progression = 0
+    else:
+        progression = (len(terminer) / total) * 100
+
     deadline_futures = []
+    en_retard_count = 0
 
     for tache in en_cours:
         deadline_str = tache.get("deadline")
@@ -179,12 +185,14 @@ def obtenir_resume_task():
                 deadline_date = datetime.strptime(deadline_str, "%d/%m/%Y")
             except ValueError:
                 continue
-            if deadline_date.date() >= maintenant.date():
+
+            if deadline_date.date() < maintenant.date():
+                en_retard_count +=1 
+            else:
                 deadline_futures.append((deadline_date, tache))
 
     if deadline_futures:
         prochaine_date, prochaine_tache = min(deadline_futures, key=lambda x: x[0])
-
         jours_restant = (prochaine_date.date() - maintenant.date()).days
     else:
         prochaine_tache = None
@@ -194,6 +202,8 @@ def obtenir_resume_task():
         "en_cours": len(en_cours),
         "terminees": len(terminer),
         "hautes": len(prio_haute),
+        "progression": progression,
+        "en_retard": en_retard_count,
         "prochaine": (
             {
                 "titre": prochaine_tache["titre"],

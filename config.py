@@ -1,5 +1,5 @@
 APP_NAME = "Personal Dashboard"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 DESCRIPTION = (
     "Dashboard personnel en ligne de commande regroupant "
